@@ -1,8 +1,8 @@
 
 const users                    = require('../../model/users')
 const createError              = require('http-errors')
-const registerRequestValidator = require('../middleware/registerRequestValidation')
-const loginRequestValidation   = require('../middleware/loginRequestValidation')
+const registerRequestValidator = require('../request/registerRequestValidation')
+const loginRequestValidation   = require('../request/loginRequestValidation')
 const {signAccessToken, signRefreshToken,refreshTokenValidator}   = require('../middleware/jwtToken')
 const commonController         = ()=>{
     return {

@@ -4,10 +4,17 @@ const createError              = require('http-errors')
 const registerRequestValidator = require('../request/registerRequestValidation')
 const loginRequestValidation   = require('../request/loginRequestValidation')
 const {signAccessToken, signRefreshToken,refreshTokenValidator}   = require('../middleware/jwtToken')
+const AppException = require('../../exceptions/AppException')
 const commonController         = ()=>{
     return {
         homePage(req,res,next){
-            res.success();
+           try{
+                 //new AppException('ram ram ji',200,true)
+                res.success();
+           }catch(err){
+            next(err)
+           }
+            
         },
         async loginRequest(req,res,next){
             try{ 
@@ -60,6 +67,17 @@ const commonController         = ()=>{
                 await users.updateOne({email:userId},{refreshToken:refresh_token})
                 res.data({access_token,refresh_token,expiresIn,'type':'bearer'});
             }catch(err){ next(err)}
+        },
+        async logout(req,res,next){
+            try{
+                const {refreshToken} =req.body;
+                if(!refreshToken) throw createError.BadRequest()
+                const userId = await refreshTokenValidator(refreshToken) 
+                await users.updateOne({email:userId},{refreshToken:''})
+                return res.success()
+            }catch(error){
+                next(error)
+            }
         }
     }
 }

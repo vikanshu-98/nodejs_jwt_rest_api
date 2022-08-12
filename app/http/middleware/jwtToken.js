@@ -80,7 +80,7 @@ module.exports={
                 const email = payload.aud; 
                 userModel.findOne({$and:[{email:email},{refreshToken:token}]},function(err,data){
                     if(err) reject(err)
-                    if(!data)  reject(createError.Unauthorized('This token has been blacklisted!!'))
+                    if(!data)  reject(createError.Unauthorized())
                     resolve(payload.aud)
                 })
                
